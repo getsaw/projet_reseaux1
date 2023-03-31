@@ -72,8 +72,10 @@ def analyse_dns(filename):
 
         if dns_query_types.get(int(packet.dns.qry_type.int_value)) not in dns_types:
             dns_types.add(dns_query_types.get(int(packet.dns.qry_type)))
-    plt.hist(np.array(all_dns))
-    plt.show()
+    #    if packet.dns.count_add_rr.int_value > 0:
+    #s        print(packet.dns.field_names)
+    #plt.hist(np.array(all_dns))
+    #plt.show()
 
 def run():
     analyse_dns("Traces/trace_sans_actions.pcapng")
