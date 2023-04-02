@@ -55,6 +55,8 @@ hash_name_servers = set()
 
 dns_types = set()
 
+file_lst = ["Traces/trace_sans_actions.pcapng","Traces/ouverture_messenger.pcapng", "Traces/envois_msg_colet.pcapng","Traces/appel_réussi.pcapng","Traces/appel_sans_réponse.pcapng","Traces/envoie_fichier.pcapng"]
+
 autoritative = []
 name_servers = []
 
@@ -62,15 +64,16 @@ def analyse_dns(filename):
     capture = pyshark.FileCapture(filename, display_filter="dns")
     all_dns = []
     for packet in capture:
-        if not packet.dns.flags_response.int_value:
+        if packet.dns.flags_response.int_value:
             if hash(packet.dns.qry_name) not in hash_name_servers:
                 hash_name_servers.add(hash(packet.dns.qry_name))
                 name_servers.append(packet.dns.qry_name)
         if packet.dns.count_auth_rr.int_value > 0:
-            autoritative.append(packet.dns.resp_name)
+            autoritative.append(packet.dns.soa_mname)
+
         all_dns.append(dns_query_types.get(int(packet.dns.qry_type)))
 
-        if dns_query_types.get(int(packet.dns.qry_type.int_value)) not in dns_types:
+        if dns_query_types.get(int(packet.dns.qry_type)) not in dns_types:
             dns_types.add(dns_query_types.get(int(packet.dns.qry_type)))
     #    if packet.dns.count_add_rr.int_value > 0:
     #s        print(packet.dns.field_names)
@@ -78,12 +81,13 @@ def analyse_dns(filename):
     #plt.show()
 
 def run():
-    analyse_dns("Traces/trace_sans_actions.pcapng")
-    analyse_dns("Traces/ouverture_messenger.pcapng")
-    analyse_dns("Traces/envois_msg_colet.pcapng")
+    for file in file_lst:
+        analyse_dns(file)
+
     print(len(name_servers))
     print(name_servers)
-    print(autoritative)
+    for i in autoritative:
+        print(i+", ", end="")
     print(dns_types)
 
 if __name__ == '__main__':
