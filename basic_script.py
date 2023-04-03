@@ -55,7 +55,7 @@ hash_name_servers = set()
 
 dns_types = set()
 
-file_lst = ["Traces/trace_sans_actions.pcapng","Traces/ouverture_messenger.pcapng", "Traces/envois_msg_colet.pcapng","Traces/appel_réussi.pcapng","Traces/appel_sans_réponse.pcapng","Traces/envoie_fichier.pcapng"]
+file_lst = ["Traces/trace_sans_actions.pcapng","Traces/ouverture_messenger.pcapng", "Traces/envois_msg_colet.pcapng","Traces/appel_réussi.pcapng","Traces/appel_sans_réponse.pcapng","Traces/envoie_fichier.pcapng", "Traces/test_trace.pcapng"]
 
 autoritative = []
 name_servers = []
