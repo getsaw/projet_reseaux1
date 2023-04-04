@@ -55,8 +55,7 @@ hash_name_servers = set()
 
 dns_types = set()
 
-file_lst = ["Traces/trace_sans_actions.pcapng","Traces/ouverture_messenger.pcapng", "Traces/envois_msg_colet.pcapng","Traces/appel_réussi.pcapng","Traces/appel_sans_réponse.pcapng","Traces/envoie_fichier.pcapng", "Traces/test_trace.pcapng"]
-
+file_lst = ["Traces/trace_sans_actions.pcapng","Traces/ouverture_messenger.pcapng", "Traces/envois_msg_colet.pcapng","Traces/appel_réussi.pcapng","Traces/appel_sans_réponse.pcapng","Traces/envoie_fichier.pcapng", "Traces/envoie_de_message_antoine.pcapng", "Traces/appel_audio_uniquement.pcapng", "Traces/appel_vidéo.pcapng"]
 autoritative = []
 name_servers = []
 
@@ -80,10 +79,32 @@ def analyse_dns(filename):
     #plt.hist(np.array(all_dns))
     #plt.show()
 
+def analyse_udp(filename):
+    capture = pyshark.FileCapture(filename, display_filter="udp")
+    x = 0
+    for packet in capture:
+        #print(packet)
+        x+=1
+    print(x)
+def analyse_tcp(filename):
+    capture = pyshark.FileCapture(filename, display_filter="tcp")
+    x = 0
+    for packet in capture:
+        # print(packet)
+        x += 1
+    print(x)
+
+def analyse_taille_packet(filename):
+    capture = pyshark.FileCapture(filename)
+    x = 0
+    y = 0
+    for packet in capture:
+        y += 1
+        x += int(packet.length)
+    return x, y
 def run():
     for file in file_lst:
         analyse_dns(file)
-
     print(len(name_servers))
     print(name_servers)
     for i in autoritative:
