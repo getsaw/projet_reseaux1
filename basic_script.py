@@ -102,6 +102,21 @@ def analyse_taille_packet(filename):
         y += 1
         x += int(packet.length)
     return x, y
+
+def quel_adresse(filename):
+    adresse = set()
+    capture = pyshark.FileCapture(filename)
+
+    for packet in capture:
+        if hasattr(packet, 'ipv6'):
+            if packet["ipv6"].dst not in adresse:
+                adresse.add(packet["ipv6"].dst)
+        if hasattr(packet, 'ip'):
+            if packet["ip"].dst not in adresse:
+                adresse.add(packet["ip"].dst)
+    print(len(adresse))
+    for ip in adresse:
+        print(ip, end=", ")
 def run():
     for file in file_lst:
         analyse_dns(file)
@@ -112,4 +127,7 @@ def run():
     print(dns_types)
 
 if __name__ == '__main__':
-    run()
+    quel_adresse("Traces/envoie_de_message_antoine.pcapng")
+    analyse_dns("Traces/envoie_de_message_antoine.pcapng")
+    print("okok")
+    print(name_servers)
